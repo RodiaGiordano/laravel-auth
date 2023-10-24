@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Projectt;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+USE Illuminate\support\Str;
 
 
 
@@ -29,7 +30,7 @@ class ProjecttController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
@@ -40,7 +41,18 @@ class ProjecttController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $project = new Projectt;
+
+        $project->title = $data['title'];
+        $project->description = $data['description'];
+        $project->url = $data['url'];
+        $project->slug = Str::slug($project->title);
+
+        $project->save();
+
+        return redirect()->route('admin.projects.show', $project);
     }
 
     /**
@@ -60,9 +72,9 @@ class ProjecttController extends Controller
      * @param  \App\Models\Projectt  $projectt
      * @return \Illuminate\Http\Response
      */
-    public function edit(Projectt $projectt)
+    public function edit(Projectt $project)
     {
-        //
+        return view("admin.projects.edit", compact('project'));
     }
 
     /**
@@ -72,9 +84,16 @@ class ProjecttController extends Controller
      * @param  \App\Models\Projectt  $projectt
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Projectt $projectt)
+    public function update(Request $request, Projectt $project)
     {
-        //
+        $data = $request->all();
+
+        $project->title = $data['title'];
+        $project->description = $data['description'];
+        $project->url = $data['url'];
+        $project->slug = Str::slug($project->title);
+        $project->save();
+        return redirect()->route('admin.projects.show', $project);
     }
 
     /**
@@ -83,8 +102,10 @@ class ProjecttController extends Controller
      * @param  \App\Models\Projectt  $projectt
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Projectt $projectt)
+    public function destroy(Projectt $project)
     {
-        //
+        $project->delete();
+
+        return redirect()->route('admin.projects.index');
     }
 }

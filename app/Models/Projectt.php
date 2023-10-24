@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Projectt extends Model
 {
+    
     use HasFactory;
+
 }
